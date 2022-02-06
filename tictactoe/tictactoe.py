@@ -42,37 +42,62 @@ class TicTacToe:
         return
 
     def take_turn(self, player):
+            if player == "X":
+                print("It is player one's turn")
+            else:
+                print("It is player two's turn")
+
             self.take_manual_turn(player)
+
+    def check_col_win(self, player):
+
+       for col in range(len(self.board[:])):
+            columList = []
+            for row in range(len(self.board)):
+                columList.append(self.board[row][col])
+            if columList == [player,player,player]:
+                return True
+       return False
+
+    def check_row_win(self, player):
+        for row in range(len(self.board)):
+            rowList = []
+            for col in range(len(self.board[:])):
+                rowList.append(self.board[row][col])
+            if rowList == [player, player, player]:
+                return True
+        return False
+
+    def check_diag_win(self, player):
+        playerList = [player, player, player]
+        diag1 = []
+        diag1 = [self.board[0][0],self.board[1][1], self.board[2][2]]
+        if diag1 == playerList:
+            return True
+        elif [self.board[2][0],self.board[1][1], self.board[0][2]] == playerList:
+            return True
+        return False
+
+    def check_win(self, player):
+        if self.check_col_win(player) == True or self.check_row_win(player) == True or self.check_diag_win(player) == True:
+            return True
+        return False
+
+    def check_tie(self):
+        if any("-" in sublist for sublist in self.board):
+            return False
+        return True
+
+    def play_game(self):
+        player = "X"
+        while self.check_win(player) == False and self.check_tie() == False:
+            self.take_turn(player)
+            print(self.check_win(player))
+            self.print_board()
             if player == "X":
                 player = "0"
             else:
                 player = "X"
-
-
-    def check_col_win(self, player):
-
-       # for col in range(len(self.board[:])):
-         #   for row in range(len(self.board)):
-
-       return False
-
-    def check_row_win(self, player):
-        # TODO: Check row win
-        return False
-
-    def check_diag_win(self, player):
-        # TODO: Check diagonal win
-        return False
-
-    def check_win(self, player):
-        # TODO: Check win
-        return False
-
-    def check_tie(self):
-        # TODO: Check tie
-        return False
-
-    def play_game(self):
-        # TODO: Play game
+        print(player + " Wins")
         return
 
