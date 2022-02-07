@@ -70,16 +70,14 @@ class TicTacToe:
 
     def check_diag_win(self, player):
         playerList = [player, player, player]
-        diag1 = []
-        diag1 = [self.board[0][0],self.board[1][1], self.board[2][2]]
-        if diag1 == playerList:
+        if [self.board[0][0],self.board[1][1], self.board[2][2]] == playerList:
             return True
         elif [self.board[2][0],self.board[1][1], self.board[0][2]] == playerList:
             return True
         return False
 
     def check_win(self, player):
-        if self.check_col_win(player) == True or self.check_row_win(player) == True or self.check_diag_win(player) == True:
+        if self.check_col_win(player) or self.check_row_win(player) or self.check_diag_win(player):
             return True
         return False
 
@@ -87,17 +85,25 @@ class TicTacToe:
         if any("-" in sublist for sublist in self.board):
             return False
         return True
+    def change_player(self, player):
+        if player == "X":
+            return "0"
+        else:
+            return "X"
+
 
     def play_game(self):
-        player = "X"
-        while self.check_win(player) == False and self.check_tie() == False:
+        player = "0"
+        gameRun = True
+        while gameRun:
+            player = self.change_player(player)
             self.take_turn(player)
-            print(self.check_win(player))
             self.print_board()
-            if player == "X":
-                player = "0"
-            else:
-                player = "X"
-        print(player + " Wins")
+            if self.check_win(player):
+                print(player + " Wins!")
+                gameRun = False
+            elif self.check_tie():
+                print("Tie")
+                gameRun = False
         return
 
