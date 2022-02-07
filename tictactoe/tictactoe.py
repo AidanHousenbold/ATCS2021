@@ -44,10 +44,10 @@ class TicTacToe:
     def take_turn(self, player):
             if player == "X":
                 print("It is player one's turn")
+                self.take_manual_turn(player)
             else:
                 print("It is player two's turn")
-
-            self.take_manual_turn(player)
+                self.take_random_turn(player)
 
     def check_col_win(self, player):
 
@@ -85,11 +85,21 @@ class TicTacToe:
         if any("-" in sublist for sublist in self.board):
             return False
         return True
+
     def change_player(self, player):
         if player == "X":
             return "0"
         else:
             return "X"
+
+    def take_random_turn(self, player):
+        row = random.randint(0,2)
+        col = random.randint(0,2)
+        while self.is_valid_move(int(row), int(col)) == False:
+            row = random.randint(0, 2)
+            col = random.randint(0,2)
+        self.place_player(player, int(row), int(col))
+        return
 
 
     def play_game(self):
