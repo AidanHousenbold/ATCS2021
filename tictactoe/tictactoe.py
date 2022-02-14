@@ -2,8 +2,8 @@ import random
 
 class TicTacToe:
     def __init__(self):
-        #self.board = [['-','-','-'], ['-','-','-'], ['-','-','-']]
-        self.board = [['X', '0', 'X'], ['0','0', 'X'], ['-','X', '-']]
+        self.board = [['-','-','-'], ['-','-','-'], ['-','-','-']]
+        #self.board = [['X', '0', 'X'], ['0','0', 'X'], ['-','X', '-']]
 
     def print_instructions(self):
         print("Welcome to TicTacToe")
@@ -81,9 +81,14 @@ class TicTacToe:
         return False
 
     def check_tie(self):
-        if any("-" in sublist for sublist in self.board):
+        if self.check_win("X"):
             return False
-        return True
+        elif self.check_win("0"):
+            return False
+        elif any("-" in sublist for sublist in self.board):
+            return False
+        else:
+            return True
 
     def change_player(self, player):
         if player == "X":
@@ -149,8 +154,8 @@ class TicTacToe:
         while gameRun:
             player = self.change_player(player)
             self.take_turn(player)
-            self.print_board()
-            print(self.get_possible_moves())
+            if player == "0":
+                self.print_board()
             if self.check_win(player):
                 print(player + " Wins!")
                 gameRun = False
