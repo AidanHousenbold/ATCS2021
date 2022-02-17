@@ -1,4 +1,5 @@
 import random
+import time
 
 class TicTacToe:
     def __init__(self):
@@ -96,8 +97,12 @@ class TicTacToe:
         else:
             return "X"
     def take_minimax_turn(self, player):
-        score,row,col = self.minimax(player)
+        depth = 15
+        start = time.time()
+        score,row,col = self.minimax(player, depth)
+        end = time.time()
         self.place_player(player, row, col)
+        print("This turn took: ", end-start, "seconds")
 
     def take_random_turn(self, player):
         row = random.randint(0,2)
@@ -107,6 +112,7 @@ class TicTacToe:
             col = random.randint(0,2)
         self.place_player(player, int(row), int(col))
         return
+
     def get_possible_moves(self):
         moves = []
         for row in range(len(self.board)):
@@ -115,8 +121,49 @@ class TicTacToe:
                     moves.append([row,col])
         return moves
 
-    def minimax(self, player):
-        if self.check_tie():
+    def take_minimax_aplha_beta_turn(self, player):
+        depth = 15
+        alpha = -100
+        beta = 100
+        self.minimax_alpha_beta(player, depth,alpha,beta)
+
+    def minimax_alpha_beta(self, player, depth, alpha, beta):
+        if self.check_tie() or depth == 0:
+            return (0, None, None)
+
+        if self.check_win("0"):
+            return (10, None, None)
+
+        if self.check_win("X"):
+            return (10, None, None)
+        opt_row = -1
+        opt_col = -1
+        if player == "0":
+            for move in self.get_possible_moves():
+                self.place_player("0",move[0], move[1])
+                score = self.minimax("X", depth - 1, alpha, beta)[0]
+                self.place_player("-", move[0], move[1])
+                if score >= beta:
+                    best = score
+                    opt_row = move[0]
+                    opt_col = move[1]
+            return (best, opt_row, opt_col)
+
+        if player == "X":
+            if self.check_win(player):
+                return (-10, None, None)
+            for move in self.get_possible_moves():
+                self.place_player("X", move[0], move[1])
+                score = self.minimax("0", depth - 1, alpha, beta)[0]
+                self.place_player("-", move[0], move[1])
+                if worst > score:
+                    worst = score
+                    opt_row = move[0]
+                    opt_col = move[1]
+            return (worst, opt_row, opt_col)
+
+    def minimax(self, player, Depth):
+        if self.check_tie() or Depth == 0:
             return (0, None, None)
         opt_row = -1
         opt_col = -1
@@ -126,7 +173,7 @@ class TicTacToe:
             best = -1000000
             for move in self.get_possible_moves():
                 self.place_player("0",move[0], move[1])
-                score = self.minimax("X")[0]
+                score = self.minimax("X", Depth - 1)[0]
                 self.place_player("-", move[0], move[1])
                 if best < score:
                     best = score
@@ -140,7 +187,7 @@ class TicTacToe:
             worst = 100000
             for move in self.get_possible_moves():
                 self.place_player("X", move[0], move[1])
-                score = self.minimax("0")[0]
+                score = self.minimax("0", Depth - 1)[0]
                 self.place_player("-", move[0], move[1])
                 if worst > score:
                     worst = score
