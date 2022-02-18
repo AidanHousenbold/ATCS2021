@@ -11,7 +11,7 @@ board5 =[['X', '0', '0'], ['0','X', 'X'], ['-','X', '-']]
 
 
 list0fBoards = [board1, board2, board3, board4, board5]
-depth = 2
+depth = 100
 for board in list0fBoards:
     game.board = board
     min_start = time.time()
@@ -27,8 +27,8 @@ for board in list0fBoards:
 
     if mm_row == ab_row and mm_col == ab_col:
         print("passed")
-        #print("Mini Max got(" + str(mm_row) + ", " + str(mm_col) + ")")
-        #print("Mini Max Alpha Beta got(" + str(ab_row) + ", " + str(ab_col) + ")" + "\n")
+        print("Mini Max got(" + str(mm_row) + ", " + str(mm_col) + ")")
+        print("Mini Max Alpha Beta got(" + str(ab_row) + ", " + str(ab_col) + ")" + "\n")
     else:
         print("Mini Max got(" + str(mm_row) + ", " + str(mm_col) + ")")
         print("Mini Max Alpha Beta got(" + str(ab_row) + ", " + str(ab_col) + ")" + "\n")

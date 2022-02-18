@@ -129,46 +129,42 @@ class TicTacToe:
         self.place_player(player, row, col)
 
     def minimax_alpha_beta(self, player, depth, alpha, beta):
-        #check if a search bount
-        if depth == 0:
+        if self.check_tie() or depth == 0:
             return (0, None, None)
-        if self.check_tie():
-            return (0, None, None)
-        if self.check_win("0"):
-            return (10, None, None)
-        if self.check_win("X"):
-            return (-10, None, None)
+
         opt_row = -1
         opt_col = -1
-
         if player == "0":
+            if self.check_win(player):
+                return (10, None, None)
             best = -1000000
             for move in self.get_possible_moves():
                 self.place_player("0", move[0], move[1])
-                score = self.minimax_alpha_beta("X", depth -1, alpha, beta)[0]
+                score = self.minimax_alpha_beta("X", depth - 1, alpha, beta)[0]
                 self.place_player("-", move[0], move[1])
                 if best < score:
                     best = score
                     opt_row = move[0]
                     opt_col = move[1]
-                if score > alpha:
-                    alpha = score
+                alpha = max(alpha, score)
                 if alpha >= beta:
                     return (best, opt_row, opt_col)
             return (best, opt_row, opt_col)
+
         if player == "X":
-            worst = 1000000
+            if self.check_win(player):
+                return (-10, None, None)
+            worst = 100000
             for move in self.get_possible_moves():
-                self.place_player("0", move[0], move[1])
-                score = self.minimax_alpha_beta("X", depth -1, alpha, beta)[0]
+                self.place_player("X", move[0], move[1])
+                score = self.minimax_alpha_beta("0", depth - 1, alpha, beta)[0]
                 self.place_player("-", move[0], move[1])
-                if score < worst:
+                if worst > score:
                     worst = score
                     opt_row = move[0]
                     opt_col = move[1]
-                if score < beta:
-                    beta = score
-                if alpha <= beta:
+                beta = min(beta, score)
+                if alpha >= beta:
                     return (worst, opt_row, opt_col)
             return (worst, opt_row, opt_col)
 
