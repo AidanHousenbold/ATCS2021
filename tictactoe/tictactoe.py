@@ -47,7 +47,7 @@ class TicTacToe:
                 self.take_manual_turn(player)
             else:
                 print("It is player two's turn")
-                self.take_minimax_turn(player)
+                self.take_minimax_alpha_beta_turn(player)
 
     def check_col_win(self, player):
 
@@ -97,7 +97,7 @@ class TicTacToe:
         else:
             return "X"
     def take_minimax_turn(self, player):
-        depth = 15
+        depth = 100
         start = time.time()
         score,row,col = self.minimax(player, depth)
         end = time.time()
@@ -121,45 +121,55 @@ class TicTacToe:
                     moves.append([row,col])
         return moves
 
-    def take_minimax_aplha_beta_turn(self, player):
+    def take_minimax_alpha_beta_turn(self, player):
         depth = 15
         alpha = -100
         beta = 100
-        self.minimax_alpha_beta(player, depth,alpha,beta)
+        score,row,col = self.minimax_alpha_beta(player, depth, alpha, beta)
+        self.place_player(player, row, col)
 
     def minimax_alpha_beta(self, player, depth, alpha, beta):
-        if self.check_tie() or depth == 0:
+        #check if a search bount
+        if depth == 0:
             return (0, None, None)
-
+        if self.check_tie():
+            return (0, None, None)
         if self.check_win("0"):
             return (10, None, None)
-
         if self.check_win("X"):
-            return (10, None, None)
+            return (-10, None, None)
         opt_row = -1
         opt_col = -1
+
         if player == "0":
+            best = -1000000
             for move in self.get_possible_moves():
-                self.place_player("0",move[0], move[1])
-                score = self.minimax("X", depth - 1, alpha, beta)[0]
+                self.place_player("0", move[0], move[1])
+                score = self.minimax_alpha_beta("X", depth -1, alpha, beta)[0]
                 self.place_player("-", move[0], move[1])
-                if score >= beta:
+                if best < score:
                     best = score
                     opt_row = move[0]
                     opt_col = move[1]
+                if score > alpha:
+                    alpha = score
+                if alpha >= beta:
+                    return (best, opt_row, opt_col)
             return (best, opt_row, opt_col)
-
         if player == "X":
-            if self.check_win(player):
-                return (-10, None, None)
+            worst = 1000000
             for move in self.get_possible_moves():
-                self.place_player("X", move[0], move[1])
-                score = self.minimax("0", depth - 1, alpha, beta)[0]
+                self.place_player("0", move[0], move[1])
+                score = self.minimax_alpha_beta("X", depth -1, alpha, beta)[0]
                 self.place_player("-", move[0], move[1])
-                if worst > score:
+                if score < worst:
                     worst = score
                     opt_row = move[0]
                     opt_col = move[1]
+                if score < beta:
+                    beta = score
+                if alpha <= beta:
+                    return (worst, opt_row, opt_col)
             return (worst, opt_row, opt_col)
 
     def minimax(self, player, Depth):
