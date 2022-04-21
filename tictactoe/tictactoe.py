@@ -3,13 +3,13 @@ import time
 
 class TicTacToe:
     def __init__(self):
-        self.board = [['-','-','-'], ['-','-','-'], ['-','-','-']]
-        #self.board = [['X', '0', 'X'], ['0','0', 'X'], ['-','X', '-']]
+        #self.board = [['-','-','-'], ['-','-','-'], ['-','-','-']]
+        self.board = [['X', '0', 'X'], ['0','0', 'X'], ['-','X', '-']]
 
     def print_instructions(self):
         print("Welcome to TicTacToe")
         print("Player 1 is X and Player 2 is 0")
-        print("Take turns placing your pieces - the first to 2 in a row wins!")
+        print("Take turns placing your pieces - the first to 3 in a row wins!")
         return
 
     def print_board(self):
