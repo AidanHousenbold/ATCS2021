@@ -3,15 +3,53 @@ Aidan Housenbold
 X-ray image recognition
 
 refernce:
-https://www.quora.com/How-can-I-read-a-DICOM-image-in-Python
+
+#Help for using tensorflow for my AI
+https://www.tensorflow.org/tutorials/images/classification
+
+Help for converting images from DICOM to PNG
+https://www.kaggle.com/code/ibombonato/x-ray-body-part-classification-fastai-starter
 
 '''
 
-import cv2
-import pydicom
+import numpy as np
+import os
+import PIL
+import PIL.Image
+import tensorflow as tf
+import tensorflow_datasets as tfds
+import pandas as pd
+
+#Load the data and organize it
+labels = pd.read_csv('data/train_df.csv')
+instances = labels[['SOPInstanceUID','Target']]
+
+abdomen = []
+ankle = []
+cervicalSpine = []
+chest = []
+clavicles = []
+elbow = []
+feet = []
+finger = []
+forearm = []
+hand = []
+hip = []
+knee = []
+lowerLeg = []
+lumbarSpine = []
+others = []
+pelvis = []
+shoulder = []
+sinus = []
+skull = []
+thigh = []
+thoracicSpine = []
+wrist = []
+
+for UID in instances['SOPInstanceUID']:
 
 
-ds = pydicom.dcmread('assets/archive/test/test/test/5/1.2.826.0.1.3680043.8.498.12506063821850171756494207689001728484
-                     '1.2.826.0.1.3680043.8.498.72533800876543798738969965510832915095-c.dcm')
+
 
 
